@@ -14,6 +14,10 @@ if &runtimepath !~# '/dein.vim'
 endif
 " }}}
 
+if !isdirectory(expand('~/.cache/vim-venv'))
+  execute '!python -m venv ~/.cache/vim-venv'
+  execute '!source ~/.cache/vim-venv/bin/activate && pip install pynvim autopep8 && deactivate'
+endif
 
 let s:watch_files = ['~/.config/nvim/init.vim', '~/.config/nvim/dein.toml', '~/.config/nvim/dein_lazy.toml']
 
@@ -104,7 +108,7 @@ set undodir=~/.cache/vim_undo
 set undofile
 endif
 
-let g:python3_host_prog = '/usr/bin/python3'
+let g:python3_host_prog = '~/.cache/venv_venv/bin/python'
 
 " シンタックスハイライトの有効化
 syntax enable
