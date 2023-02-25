@@ -1,0 +1,258 @@
+[[plugins]]
+repo = 'nvim-lua/plenary.nvim'
+
+# https://dev.classmethod.jp/articles/nvim_telescope/
+[[plugins]]
+# depends = ['nvim-telescope/telescope-frecency.nvim']
+repo = 'nvim-telescope/telescope.nvim'
+hook_add = '''
+nnoremap <Space>f <cmd>Telescope find_files hidden=true<cr>
+nnoremap <Space>g <cmd>Telescope live_grep<cr>
+nnoremap <Space>gb <cmd>Telescope git_branches theme=get_dropdown<cr>
+nnoremap <Space>gc <cmd>Telescope git_commits theme=get_dropdown<cr>
+nnoremap <Space>gs <cmd>Telescope git_status theme=get_dropdown<cr>
+
+lua <<EOF
+require('telescope').setup{
+  defaults = {
+    mappings = {
+      n = {
+        ["s"] = require('telescope.actions').select_vertical,
+      },
+      i = {
+        ["<esc>"] = require('telescope.actions').close,
+      }
+    }
+  }
+}
+EOF
+'''
+# [[plugins]]
+# repo = 'nvim-telescope/telescope-frecency.nvim'
+# depends = ['kkharji/sqlite.lua']
+# hook_add = '''
+# nnoremap <Space>q <cmd>Telescope frecency<cr>
+# lua << EOF
+# require"telescope".load_extension("frecency")
+# EOF
+# '''
+# [[plugins]]
+# repo = 'kkharji/sqlite.lua'
+[[plugins]]
+repo = 'kyazdani42/nvim-web-devicons'
+
+[[plugins]]
+repo = 'ryanoasis/vim-devicons'
+
+[[plugins]]
+repo = 'kristijanhusak/defx-icons'
+
+[[plugins]]
+ repo = 'vim-denops/denops.vim'
+
+[[plugins]]
+ repo = 'kat0h/bufpreview.vim'
+
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+hook_add = '''
+set laststatus=2
+set noshowmode
+let g:lightline = {
+    \  'enable': { 'tabline': 0 },
+    \  'colorscheme': 'wombat',
+     \  'active': {
+     \    'left': [ ['mode', 'paste'], ['readonly', 'filename', 'venv', 'modified'] ],
+     \  },
+     \ 'component_function': {
+     \   'venv': 'VenvName',
+     \   'modified': 'LightlineModified',
+     \   'readonly': 'LightlineReadonly',
+     \   'fugitive': 'LightlineFugitive',
+     \   'fileformat': 'LightlineFileformat',
+     \   'filetype': 'LightlineFiletype',
+     \   'fileencoding': 'LightlineFileencoding',
+     \ },
+     \
+     \  'separator': { 'left': "", 'right': "" },
+     \  'subseparator' :{ 'left': '|', 'right': '|' },
+     \}
+ function! VenvName()
+   let env = $VIRTUAL_ENV
+   if env ==# ""
+     return ""
+   endif
+   let str_len = strlen(env)
+   let first_slash = 0
+   let slash_pos = 1
+   for i in range(0, str_len-1)
+     if env[str_len-i] ==# '/'
+       if first_slash ==# 0
+         let first_slash = 1
+       else
+         let slash_pos = i
+         break
+       endif
+     endif
+   endfor
+   return join(["\<Char-0xe235>", env[str_len-slash_pos+1:]])
+ endfunction
+ function! LightlineModified()
+   return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+ endfunction
+ function! LightlineReadonly()
+   return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? 'x' : ''
+ endfunction
+ function! LightlineFugitive()
+   if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
+     return fugitive#head()
+   else
+     return ''
+   endif
+ endfunction
+ function! LightlineFileformat()
+   return winwidth(0) > 70 ? &fileformat : ''
+ endfunction
+ function! LightlineFiletype()
+   return winwidth(0) > 70 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+ endfunction
+ function! LightlineFileencoding()
+   return &fenc !=# '' ? &fenc : &enc
+ endfunction
+ '''
+
+[[plugins]]
+ repo = 'nvim-treesitter/nvim-treesitter'
+ hook_post_update = 'TSUpdate'
+hook_add = '''
+'''
+
+[[plugins]]
+repo = 'EdenEast/nightfox.nvim'
+depends = 'nvim-treesitter'
+
+
+[[plugins]]
+repo = 'Yggdroot/indentLine'
+hook_add = '''
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+'''
+
+[[plugins]]
+repo = 'tomtom/tcomment_vim'
+
+
+[[plugins]]
+repo = 'morim3/vim-bet'
+hook_add = '''
+vmap <Space>" :<C-u>BetExec ""<Enter>
+vmap <Space>' :<C-u>BetExec ''<Enter>
+vmap <Space>( :<C-u>BetExec ()<Enter>
+vmap <Space>[ :<C-u>BetExec []<Enter>
+vmap <Space>{ :<C-u>BetExec {}<Enter>
+'''
+
+[[plugins]]
+repo = 'crusoexia/vim-monokai'
+hook_add = '''
+'''
+
+[[plugins]]
+repo = 'neoclide/coc.nvim'
+rev = 'release'
+merged = '0'
+hook_add = '''
+function! s:check_back_space() abort
+ let col = col('.') - 1
+ return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <Enter> coc#pum#visible() ? coc#pum#confirm() : "\<Enter>"
+inoremap <silent><expr> <Esc> coc#pum#visible() ? coc#pum#cancel() : "\<Esc>"
+
+inoremap <silent><expr> <TAB>
+ \ coc#pum#visible() ? coc#pum#next(1):
+ \ <SID>check_back_space() ? "\<Tab>" :
+ \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<S-TAB>" " "\<C-h>"
+
+inoremap <silent><expr> <c-space> coc#refresh()
+
+nmap <Space>d <Plug>(coc-definition)
+nmap <Space>ref <Plug>(coc-references)
+nmap <Space>rn <Plug>(coc-rename)
+nmap <Space>j <Plug>(coc-format)
+nmap <Space>im :CocCommand pyright.organizeimports<CR>
+'''
+
+[[plugins]]
+repo = 'Shougo/defx.nvim'
+hook_add = '''
+nnoremap <silent> <Space>n :<C-u>Defx<CR>
+
+call defx#custom#option('_', {
+\ 'winwidth': 40,
+\ 'split': 'vertical',
+\ 'direction': 'topleft',
+\ 'show_ignored_files': 1,
+\ 'toggle': 1,
+\ 'resume': 1,
+\ 'columns': 'indent:icons:filename:mark',
+\ })
+
+autocmd FileType defx call s:defx_my_settings()
+function! s:defx_my_settings() abort
+  nnoremap <silent><buffer><expr> <CR>
+  \ defx#is_directory() ? defx#do_action('open_or_close_tree') :
+  \ defx#do_action('multi', [['drop', ], 'quit'])
+  nnoremap <silent><buffer><expr> <Space>
+  \ defx#do_action('multi', [['drop', 'split'], 'quit'])
+  nnoremap <silent><buffer><expr> <Esc>
+  \ defx#do_action('quit')
+  nnoremap <silent><buffer><expr> o
+  \ defx#do_action('open')
+  nnoremap <silent><buffer><expr> q
+  \ defx#do_action('quit')
+  nnoremap <silent><buffer><expr> ..
+  \ defx#do_action('cd', ['..'])
+  nnoremap <silent><buffer><expr> c
+  \ defx#do_action('copy')
+  nnoremap <silent><buffer><expr> cd
+  \ defx#do_action('change_vim_cwd')
+  nnoremap <silent><buffer><expr> p
+  \ defx#do_action('paste')
+  nnoremap <silent><buffer><expr> d
+  \ defx#do_action('remove')
+  nnoremap <silent><buffer><expr> r
+  \ defx#do_action('rename')
+  nnoremap <silent><buffer><expr> m
+  \ defx#do_action('move')
+  nnoremap <silent><buffer><expr> n
+  \ defx#do_action('new_file')
+  nnoremap <silent><buffer><expr> N
+  \ defx#do_action('new_directory')
+  nnoremap <silent><buffer><expr> yy
+  \ defx#do_action('yank_path')
+endfunction
+'''
+# [[plugins]]
+# repo = 'tpope/vim-fugitive'
+# hook_add='''
+# nnoremap <Space>gita :Git add %:p<CR><CR>
+# nnoremap <Space>gitc :Git commit<CR><CR>
+# nnoremap <Space>gits :Git<CR>
+# nnoremap <Space>gitp :Git push<CR>
+# nnoremap <Space>gitd :Git diff<CR>
+# nnoremap <Space>gitl :Git log<CR>
+# nnoremap <Space>gitb :Git blame<CR>
+# '''
+
+
+[[plugins]]
+repo = 'simeji/winresizer'
+
+#
+#
+#  [[plugins]]
+#  repo = 'kaz399/spzenhan.vim'
