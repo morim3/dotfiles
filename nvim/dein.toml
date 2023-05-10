@@ -1,13 +1,21 @@
 [[plugins]]
 repo = 'nvim-lua/plenary.nvim'
 
-# https://dev.classmethod.jp/articles/nvim_telescope/
+# [[plugins]]
+# repo = 'nvim-telescope/telescope-file-browser.nvim'
+# hook_add='''
+# lua <<EOF
+# require("telescope").load_extension "file_browser"
+# EOF
+# '''
+
 [[plugins]]
 # depends = ['nvim-telescope/telescope-frecency.nvim']
 repo = 'nvim-telescope/telescope.nvim'
 hook_add = '''
 nnoremap <Space>f <cmd>Telescope find_files hidden=true<cr>
 nnoremap <Space>g <cmd>Telescope live_grep<cr>
+nnoremap <Space>b <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <Space>gb <cmd>Telescope git_branches theme=get_dropdown<cr>
 nnoremap <Space>gc <cmd>Telescope git_commits theme=get_dropdown<cr>
 nnoremap <Space>gs <cmd>Telescope git_status theme=get_dropdown<cr>
@@ -27,6 +35,7 @@ require('telescope').setup{
 }
 EOF
 '''
+
 # [[plugins]]
 # repo = 'nvim-telescope/telescope-frecency.nvim'
 # depends = ['kkharji/sqlite.lua']
@@ -184,6 +193,14 @@ nmap <Space>ref <Plug>(coc-references)
 nmap <Space>rn <Plug>(coc-rename)
 nmap <Space>j <Plug>(coc-format)
 nmap <Space>im :CocCommand pyright.organizeimports<CR>
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
 '''
 
 [[plugins]]
@@ -198,28 +215,34 @@ call defx#custom#option('_', {
 \ 'show_ignored_files': 1,
 \ 'toggle': 1,
 \ 'resume': 1,
-\ 'columns': 'indent:icons:filename:mark',
+\ 'columns': 'indent:icons:space:filename:git',
 \ })
 
+function! g:OpenFileOutside(context) abort
+  let l:file = string(a:context.targets[0])
+  let l:cmd = printf('/mnt/c/Windows/System32/cmd.exe /c start $(wslpath -w %s) 2> /dev/null', l:file)
+  let l:result = system(l:cmd)
+endfunction
+
 autocmd FileType defx call s:defx_my_settings()
+
 function! s:defx_my_settings() abort
   nnoremap <silent><buffer><expr> <CR>
   \ defx#is_directory() ? defx#do_action('open_or_close_tree') :
   \ defx#do_action('multi', [['drop', ], 'quit'])
-  nnoremap <silent><buffer><expr> <Space>
-  \ defx#do_action('multi', [['drop', 'split'], 'quit'])
+  nnoremap <silent><buffer><expr> s
+  \ defx#do_action('multi', [['drop', 'vsplit'], 'quit'])
   nnoremap <silent><buffer><expr> <Esc>
   \ defx#do_action('quit')
-  nnoremap <silent><buffer><expr> o
-  \ defx#do_action('open')
-  nnoremap <silent><buffer><expr> q
-  \ defx#do_action('quit')
+  nnoremap <silent><buffer><expr> o 
+  \ defx#is_directory() ? defx#do_action('open_tree') :
+  \ defx#do_action('call', 'g:OpenFileOutside')
   nnoremap <silent><buffer><expr> ..
   \ defx#do_action('cd', ['..'])
   nnoremap <silent><buffer><expr> c
   \ defx#do_action('copy')
   nnoremap <silent><buffer><expr> cd
-  \ defx#do_action('change_vim_cwd')
+  \ defx#do_action('multi', ['open_directory', 'change_vim_cwd'])
   nnoremap <silent><buffer><expr> p
   \ defx#do_action('paste')
   nnoremap <silent><buffer><expr> d
@@ -236,21 +259,21 @@ function! s:defx_my_settings() abort
   \ defx#do_action('yank_path')
 endfunction
 '''
-# [[plugins]]
-# repo = 'tpope/vim-fugitive'
-# hook_add='''
-# nnoremap <Space>gita :Git add %:p<CR><CR>
-# nnoremap <Space>gitc :Git commit<CR><CR>
-# nnoremap <Space>gits :Git<CR>
-# nnoremap <Space>gitp :Git push<CR>
-# nnoremap <Space>gitd :Git diff<CR>
-# nnoremap <Space>gitl :Git log<CR>
-# nnoremap <Space>gitb :Git blame<CR>
-# '''
-
+[[plugins]]
+repo = 'lambdalisue/gina.vim'
 
 [[plugins]]
 repo = 'simeji/winresizer'
+hood_add = '''
+nnoremap <Space>e :WinResizerStartResize<CR>
+'''
+
+[[plugins]]
+repo = 'akinsho/toggleterm.nvim'
+hood_add = '''
+require("toggleterm").setup{}
+
+'''
 
 #
 #

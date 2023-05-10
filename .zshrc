@@ -31,6 +31,7 @@ export PATH="/home/morim/.deno/bin:$PATH"
 # end path setting#
 export PYTHONPATH="/home/morim/repos/mitou-evoluation/:$PYTHONPATH"
 export PYTHONPATH="/home/morim/repos/mitou-quads/:$PYTHONPATH"
+export PYTHONPATH="/home/morim/repos/hm_birl/:$PYTHONPATH"
 # zenhan
 # cxport zenhan='/mnt/c/Users/morim/scoop/shims/zenhan.shim'
 #

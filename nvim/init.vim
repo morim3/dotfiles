@@ -124,16 +124,21 @@ set mouse =
 let mapleader = "\<Space>"
 
 inoremap <silent> jj <ESC>
-inoremap <silent> っｊ <ESC>
 tnoremap <Esc> <C-\><C-n>
+tnoremap jj <C-\><C-n>
 autocmd TermOpen * startinsert
 
 nmap <Esc><Esc> :nohlsearch<CR><Esc>
 nnoremap tm :vsp <ENTER> :set nonumber<CR>:terminal <ENTER> 
+nnoremap tcm :cd %:h<CR> :vsp<CR> :set nonumber<CR> :terminal <ENTER> 
 nnoremap <Space>o :<C-u>call append(expand('.'), '')<Cr>j
 nnoremap Y y$
 
 nnoremap <Space>v <C-v>
+nnoremap <Space>wl <C-w>l
+nnoremap <Space>wj <C-w>j
+nnoremap <Space>wh <C-w>h
+nnoremap <Space>wk <C-w>k
 nnoremap <Space>rc :vsp ~/.config/nvim/init.vim<CR>
 nnoremap <Space>plug :vsp ~/.config/nvim/dein.toml<CR>
 nnoremap <Space>plugl :vsp ~/.config/nvim/dein_lazy.toml<CR>

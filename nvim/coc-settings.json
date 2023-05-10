@@ -1,18 +1,24 @@
 {
   "suggest.noselect": true,
   "suggest.preferCompleteThanJumpPlaceholder": true,
-
-  "python.formatting.autopep8Path": "/home/morim/.cache/vim-venv/bin/autopep8",
+  "python.formatting.autopep8Path": "/home/morim/.cache/coc-venv/bin/autopep8",
   "python.linting.flake8Enabled": true,
   "python.analysis.useLibraryCodeForTypes": false,
   "python.analysis.typeCheckingMode": "off",
-
-
   "languageserver": {
     "ccls": {
       "command": "ccls",
-      "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
-      "rootPatterns": [".ccls-root", "compile_commands.json"],
+      "filetypes": [
+        "c",
+        "cpp",
+        "cuda",
+        "objc",
+        "objcpp"
+      ],
+      "rootPatterns": [
+        ".ccls-root",
+        "compile_commands.json"
+      ],
       "initializationOptions": {
         "cache": {
           "directory": ".ccls-cache"
@@ -27,8 +33,5 @@
         ]
       }
     }
-
   }
-
-
 }
