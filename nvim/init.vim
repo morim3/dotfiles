@@ -108,7 +108,7 @@ set undodir=~/.cache/vim_undo
 set undofile
 endif
 
-let g:python3_host_prog = '~/.cache/venv_venv/bin/python'
+let g:python3_host_prog = '~/.cache/vim_venv/bin/python'
 
 " シンタックスハイライトの有効化
 syntax enable
