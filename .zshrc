@@ -27,11 +27,13 @@ export RPROMPT='%F{cyan}'$'\Ue388''%f %*'
 # path setting#
 export PATH="/home/morim/.local/bin:$PATH"
 export PATH="/home/morim/.deno/bin:$PATH"
+export PATH="/home/morim/.local/src/node-v18.16.0-linux-x64/bin:$PATH"
 
 # end path setting#
 export PYTHONPATH="/home/morim/repos/mitou-evoluation/:$PYTHONPATH"
 export PYTHONPATH="/home/morim/repos/mitou-quads/:$PYTHONPATH"
 export PYTHONPATH="/home/morim/repos/hm_birl/:$PYTHONPATH"
+export PYTHONPATH="/home/morim/repos/control/metric_identify:$PYTHONPATH"
 # zenhan
 # cxport zenhan='/mnt/c/Users/morim/scoop/shims/zenhan.shim'
 #
@@ -59,12 +61,11 @@ function open() {
     fi
 }
 
-alias less='bat'    
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+alias less='batcat'    
+export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 help() {
-    "$@" --help 2>&1 | bat --plain --language=help
+    "$@" --help 2>&1 | batcat --plain --language=help
 }
-
 
 
 if [[ $(command -v exa) ]]; then
@@ -122,3 +123,14 @@ ga(){
   fi
   git status
 }
+
+# >>> juliaup initialize >>>
+
+# !! Contents within this block are managed by juliaup !!
+
+path=('/home/morim/.juliaup/bin' $path)
+export PATH
+
+# <<< juliaup initialize <<<
+#
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
